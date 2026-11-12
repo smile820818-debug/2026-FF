@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>台北一日：2026 FF之日</title>
+    <!-- 引入 Google Fonts 圓潤字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 比奇堡柔和海洋配色 */
+            --sea-top: #70D6FF;
+            --sea-mid: #4EA8DE;
+            --sea-bottom: #277DA1;
+            --sand-light: #FFF3B0;
+            --sand-dark: #F4D35E;
+            --sponge-yellow: #FFE66D;
+            --sponge-border: #E09F3E;
+            --patrick-pink: #FF99C8;
+            --squidward-teal: #A9DEF9;
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-dark: #1D3557;
+            --text-muted: #457B9D;
+            --accent-coral: #FF6B6B;
+            --shadow-soft: 0 10px 25px rgba(29, 53, 87, 0.15);
+            --shadow-card: 0 6px 16px rgba(39, 125, 161, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', 'Fredoka', sans-serif;
+            color: var(--text-dark);
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--sea-top) 0%, var(--sea-mid) 65%, var(--sea-bottom) 100%);
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 100px;
+        }
+
+        /* 比奇堡天空花朵雲 (SVG 背景裝飾) */
+        .bikini-clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(255, 230, 109, 0.5) 0%, transparent 12%),
+                radial-gradient(circle at 85% 35%, rgba(255, 153, 200, 0.45) 0%, transparent 15%),
+                radial-gradient(circle at 25% 75%, rgba(169, 222, 249, 0.5) 0%, transparent 14%);
+        }
+
+        /* 浮動氣泡容器 */
+        .bubbles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.2));
+            border: 1.5px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.75;
+            }
+            50% {
+                transform: translateY(-50vh) translateX(15px) scale(1.05);
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(-10px) scale(0.95);
+                opacity: 0;
+            }
+        }
+
+        /* 底部海底沙地與鳳梨屋剪影裝飾 */
+        .seafloor {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: linear-gradient(180deg, var(--sand-light) 0%, var(--sand-dark) 100%);
+            border-top-left-radius: 50% 25px;
+            border-top-right-radius: 50% 25px;
+            z-index: 1;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .seafloor-decor {
+            position: fixed;
+            bottom: 45px;
+            right: 16px;
+            font-size: 38px;
+            z-index: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+            user-select: none;
+            animation: gentleSway 4s ease-in-out infinite;
+        }
+
+        @keyframes gentleSway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        /* 主容器 (手機優先極致體驗) */
+        .app-container {
+            position: relative;
+            z-index: 3;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px 16px 30px;
+        }
+
+        /* Header 區塊 */
+        .header-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow-soft);
+            border: 3px solid var(--sponge-yellow);
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 海綿孔洞裝飾點 */
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 230, 109, 0.35);
+            border-radius: 50%;
+        }
+
+        .header-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: -10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 153, 200, 0.25);
+            border-radius: 50%;
+        }
+
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--sponge-yellow), #FFD166);
+            color: #6B4400;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 50px;
+            box-shadow: 0 3px 8px rgba(224, 159, 62, 0.25);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .main-title {
+            font-size: 1.65rem;
+            font-weight: 900;
+            color: var(--text-dark);
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        /* 倒數計時器區塊 */
+        .countdown-wrapper {
+            background: linear-gradient(135deg, #E0F4FF 0%, #F0F9FF 100%);
+            border-radius: 20px;
+            padding: 14px 12px;
+            border: 2px dashed #70D6FF;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .time-box {
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 8px 4px;
+            box-shadow: 0 3px 8px rgba(78, 168, 222, 0.15);
+            border-bottom: 3px solid var(--sea-mid);
+        }
+
+        .time-num {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--accent-coral);
+            line-height: 1.1;
+            display: block;
+        }
+
+        .time-unit {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 2px;
+            display: block;
+        }
+
+        /* Day 分頁切換列 */
+        .day-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .day-tab {
+            flex: 1;
+            background: var(--sponge-yellow);
+            color: #5C3A00;
+            border: 2.5px solid #FFFFFF;
+            border-radius: 18px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .day-tab.active {
+            background: linear-gradient(135deg, #FFE66D 0%, #FFCA3A 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 202, 58, 0.45);
+        }
+
+        /* 行程時間軸與卡片列表 */
+        .itinerary-section {
+            position: relative;
+        }
+
+        .timeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+        }
+
+        /* 左側貫穿氣泡時間線 */
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            bottom: 24px;
+            left: 22px;
+            width: 3px;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.85) 0px,
+                rgba(255, 255, 255, 0.85) 6px,
+                transparent 6px,
+                transparent 12px
+            );
+            z-index: 0;
+        }
+
+        .schedule-card {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border-radius: 22px;
+            padding: 14px 16px;
+            box-shadow: var(--shadow-card);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .schedule-card:active {
+            transform: scale(0.98);
+        }
+
+        /* 節點圖示圓圈 */
+        .node-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: #FFFFFF;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            border: 2.5px solid var(--sea-top);
+        }
+
+        /* 不同時段的主題邊框微調 */
+        .schedule-card[data-theme="vote"] .node-icon { border-color: #70D6FF; background: #EAF8FF; }
+        .schedule-card[data-theme="love"] .node-icon { border-color: #FF99C8; background: #FFF0F6; }
+        .schedule-card[data-theme="train"] .node-icon { border-color: #FFCA3A; background: #FFFBEB; }
+        .schedule-card[data-theme="shop"] .node-icon { border-color: #8AC926; background: #F4FCE3; }
+        .schedule-card[data-theme="concert"] {
+            background: linear-gradient(135deg, #FFFDF5 0%, #FFF0F5 100%);
+            border: 2.5px solid #FF6B6B;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.2);
+        }
+        .schedule-card[data-theme="concert"] .node-icon {
+            border-color: #FF6B6B;
+            background: #FFE3E3;
+        }
+
+        .card-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .time-tag {
+            display: inline-block;
+            font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            background: var(--sea-mid);
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-bottom: 5px;
+            letter-spacing: 0.3px;
+        }
+
+        .schedule-card[data-theme="love"] .time-tag { background: #F26A8D; }
+        .schedule-card[data-theme="train"] .time-tag { background: #E09F3E; }
+        .schedule-card[data-theme="shop"] .time-tag { background: #55A630; }
+        .schedule-card[data-theme="concert"] .time-tag { background: var(--accent-coral); }
+
+        .activity-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.35;
+            word-break: break-word;
+        }
+
+        /* 核取打卡圓圈（方便當日追蹤進度） */
+        .check-circle {
+            width: 26px;
+            height: 26px;
+            min-width: 26px;
+            border-radius: 50%;
+            border: 2.5px solid #CBD5E1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            font-size: 0.85rem;
+            font-weight: 900;
+            transition: all 0.2s ease;
+        }
+
+        .schedule-card.completed {
+            opacity: 0.72;
+        }
+
+        .schedule-card.completed .activity-title {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .schedule-card.completed .check-circle {
+            background: #55A630;
+            border-color: #55A630;
+            color: #FFFFFF;
+        }
+
+        /* 底部提示文字 */
+        .footer-tip {
+            text-align: center;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 22px;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 比奇堡背景裝飾 -->
+    <div class="bikini-clouds"></div>
+    <div class="bubbles-container" id="bubbles"></div>
+    <div class="seafloor"></div>
+    <div class="seafloor-decor" title="比奇堡鳳梨屋">🍍🫧</div>
+
+    <main class="app-container">
+        <!-- Header 區塊 -->
+        <header class="header-card">
+            <div class="date-badge">📅 2026年11月28日 (六)</div>
+            <h1 class="main-title">台北一日：2026 FF之日 🏠</h1>
+
+            <!-- 即時倒數計時器 -->
+            <div class="countdown-wrapper">
+                <div class="countdown-label" id="countdown-status">⏳ 距離演唱會之日還有</div>
+                <div class="countdown-grid">
+                    <div class="time-box">
+                        <span class="time-num" id="days">00</span>
+                        <span class="time-unit">天</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-num" id="hours">00</span>
+                        <span class="time-unit">時</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-num" id="minutes">00</span>
+                        <span class="time-unit">分</span>
+                    </div>
+                    <div class="time-box">
+                        <span class="time-num" id="seconds">00</span>
+                        <span class="time-unit">秒</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 天數分頁區塊 -->
+        <nav class="day-tabs" aria-label="行程天數切換">
+            <button class="day-tab active" data-day="day1">
+                <span>🧽 Day 1 滿滿活力行程</span>
+            </button>
+        </nav>
+
+        <!-- 行程卡片區塊 -->
+        <section class="itinerary-section" id="day1">
+            <div class="timeline-list" id="schedule-list">
+                <!-- 行程卡片將由 JS 渲染以保持結構整潔並支援互動打卡 -->
+            </div>
+        </section>
+
+        <p class="footer-tip">💡 點擊行程卡片可標記完成進度喔！</p>
+    </main>
+
+    <script>
+        // 1. 行程資料定義
+        const itineraryData = [
+            {
+                id: 'item-1',
+                time: '08:30 ~ 09:00',
+                title: '選局投票',
+                icon: '🗳️',
+                theme: 'vote'
+            },
+            {
+                id: 'item-2',
+                time: '09:00 ~ 10:00',
+                title: '苗栗載老婆',
+                icon: '🚗',
+                theme: 'love'
+            },
+            {
+                id: 'item-3',
+                time: '10:00 ~ 10:30',
+                title: '回大湖投票',
+                icon: '🍓',
+                theme: 'vote'
+            },
+            {
+                id: 'item-4',
+                time: '10:30 ~ 11:00',
+                title: '高鐵站',
+                icon: '🚄',
+                theme: 'train'
+            },
+            {
+                id: 'item-5',
+                time: '11:00 ~ 12:20',
+                title: '高鐵站閒晃',
+                icon: '☕',
+                theme: 'train'
+            },
+            {
+                id: 'item-6',
+                time: '12:20 ~ 13:20',
+                title: '出發大巨蛋',
+                icon: '🏟️',
+                theme: 'train'
+            },
+            {
+                id: 'item-7',
+                time: '13:20 ~ 19:00',
+                title: '台北逛街',
+                icon: '🛍️',
+                theme: 'shop'
+            },
+            {
+                id: 'item-8',
+                time: '19:00 ~ 24:00',
+                title: '開始驗唱會',
+                icon: '🎤',
+                theme: 'concert'
+            }
+        ];
+
+        // 2. 渲染行程卡片並支援點擊打卡（儲存於 localStorage）
+        const scheduleListEl = document.getElementById('schedule-list');
+        const STORAGE_KEY = 'ff_trip_2026_completed';
+
+        function getCompletedItems() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function toggleComplete(id, cardEl) {
+            const completed = getCompletedItems();
+            const index = completed.indexOf(id);
+            if (index > -1) {
+                completed.splice(index, 1);
+                cardEl.classList.remove('completed');
+            } else {
+                completed.push(id);
+                cardEl.classList.add('completed');
+            }
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+            } catch (e) {}
+        }
+
+        function renderSchedule() {
+            const completed = getCompletedItems();
+            scheduleListEl.innerHTML = '';
+
+            itineraryData.forEach(item => {
+                const isDone = completed.includes(item.id);
+                const card = document.createElement('article');
+                card.className = `schedule-card ${isDone ? 'completed' : ''}`;
+                card.setAttribute('data-theme', item.theme);
+
+                card.innerHTML = `
+                    <div class="node-icon">${item.icon}</div>
+                    <div class="card-content">
+                        <span class="time-tag">⏰ ${item.time}</span>
+                        <h2 class="activity-title">${item.title}</h2>
+                    </div>
+                    <div class="check-circle" aria-label="完成標記">✓</div>
+                `;
+
+                card.addEventListener('click', () => toggleComplete(item.id, card));
+                scheduleListEl.appendChild(card);
+            });
+        }
+
+        // 3. 即時倒數計時器（目標時間：2026-11-28 00:00:00）
+        const targetDate = new Date('2026-11-28T00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            const statusEl = document.getElementById('countdown-status');
+
+            if (distance <= 0) {
+                daysEl.textContent = '00';
+                hoursEl.textContent = '00';
+                minutesEl.textContent = '00';
+                secondsEl.textContent = '00';
+                statusEl.textContent = '🎉 2026 FF之日就是今天！出發嗨翻天！';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            daysEl.textContent = String(days).padStart(2, '0');
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        // 4. 動態產生比奇堡海底氣泡效果
+        function createBubbles() {
+            const container = document.getElementById('bubbles');
+            const bubbleCount = 16;
+
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 22 + 8; // 8px ~ 30px
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.animationDuration = `${Math.random() * 8 + 7}s`;
+                bubble.style.animationDelay = `${Math.random() * 6}s`;
+                container.appendChild(bubble);
+            }
+        }
+
+        // 初始化執行
+        renderSchedule();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        createBubbles();
+    </script>
+</body>
+</html>
